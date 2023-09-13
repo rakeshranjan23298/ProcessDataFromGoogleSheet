@@ -1,0 +1,52 @@
+DELIMITER $$
+
+DROP PROCEDURE IF EXISTS `asterisk`.`sp_LeadPush_google` $$
+CREATE PROCEDURE `sp_LeadPush_google`(szRef varchar(100),szmobile varchar(100),szemail varchar(200),szname varchar(200),szf1 varchar(200),szf2 varchar(200),szf3 varchar(200),szf4 varchar(200),szf5 varchar(200),szf6 varchar(200),szf7 varchar(200),szf8 varchar(200),szf9 varchar(200),szf10 varchar(200),szSheet varchar(100))
+BEGIN
+
+DECLARE szBatchName VARCHAR(100);
+DECLARE szBatchID VARCHAR(100);
+DECLARE szSrvId VARCHAR(100);
+DECLARE szLevel varchar(20);
+DECLARE szSKILL varchar(20);
+DECLARE szpriority varchar(20);
+
+Set szSrvId = '19';
+Set szpriority = '15';
+
+if(szSheet = '') then
+  Set szSheet = 'LEADAPI';
+end if;
+
+
+-- SET szSrvId = (SELECT gn_srv_id FROM lsq_crm_general where gn_type = 'PRODUCT' and gn_value=szf3 limit 1);
+-- SET szSrvId = ifnull(szSrvId,'6');
+
+SET szBatchName = CONCAT(szSheet,'_',DATE_FORMAT(now(), '%Y_%m_%d'));
+
+       set @sql = CONCAT('SELECT count(*) FROM tbl_lead_dump_',szSrvId,' WHERE l_msisdn_1 = ''',szmobile,''' into @nPendingCount');
+
+       PREPARE stmt FROM @sql;
+       EXECUTE stmt;
+       DEALLOCATE PREPARE stmt;
+
+    if(@nPendingCount = 0) then
+
+
+        insert into tbl_batches(b_srv_id,b_upload_date,b_name,b_status,b_start_date,b_end_date, b_t_count,b_u_count)
+        values(szSrvId,now(),szBatchName,'P',now(),'2023-12-31',1,1)
+        on duplicate key update b_t_count =b_t_count + 1,b_u_count =b_u_Count + 1,b_end_date = '2023-12-31';
+
+        SET szBatchID = (SELECT b_id from tbl_batches WHERE b_name = szBatchName and b_srv_id = szSrvId limit 1);
+
+        set @sql = CONCAT('INSERT INTO tbl_lead_dump_',szSrvId,' (l_user_field_21,l_priority,l_ref_id,l_batch_id,l_batch_name,l_srv_id,l_attempt,l_retry,l_next_date_of_contact,l_msisdn_1,l_fname,l_status,l_user_field_20,l_email,l_user_field_1,l_user_field_2,l_user_field_3,l_user_field_4,l_user_field_5,l_user_field_6,l_user_field_7,l_user_field_8,l_user_field_9,l_user_field_10) VALUES(date(now()),',szpriority,',''',szRef,''',''',szBatchID,''',''',szBatchName,''',''',szSrvId,''',0,1,now(),''',right(szmobile,10),''',''',szname,''',''P'',now(),''',szemail,''',''',szf1,''',''',szf2,''',''',szf3,''',''',szf4,''',''',szf5,''',''',szf6,''',''',szf7,''',''',szf8,''',''',szf9,''',''',szf10,''')');
+
+
+         PREPARE stmt FROM @sql;
+         EXECUTE stmt;
+         DEALLOCATE PREPARE stmt;
+     end if;
+
+END $$
+
+DELIMITER ;

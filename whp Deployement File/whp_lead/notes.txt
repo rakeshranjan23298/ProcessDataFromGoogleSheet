@@ -1,0 +1,9 @@
+*-> this project only data from link which is deployed using app script . so 
+first deploy that sheet on app script and paste that link in index.jsp. 
+
+
+*-> change service number inside sp_leadpush_google
+copy procdure- sp_LeadPush_google from asterisk
+
+
+

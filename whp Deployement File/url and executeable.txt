@@ -1,0 +1,12 @@
+java -jar whp.jar website
+java -jar whp.jar 
+
+
+LEAD API 
+
+
+leadAPI url-		https://script.google.com/macros/s/AKfycbxTbH2LC_NPpOS735PX3uzCs3Ssnec8hnzgd_ZhSxqsgvVhXk_sxso9eE6QDUCBel2YSg/exec
+
+website url- 		"https://script.googleusercontent.com/a/macros/toss4u.com/echo?user_content_key=Iq87je7zbBNK45SnWiF-jQhKjC9nZCuJJ1s_G3W_a-XAYqzkg9bxhBSKf-QhBwlJK9RMlEm0-7L1qPFSkxhsx_5Cn12LL5Z0m5_BxDlH2jW0nuo2oDemN9CCS2h10ox_nRPgeZU6HP_L_BkspCMY1Y5xQJLnggV4r4D1wyFzgBxOkcLZSudxwzvzqXlf9y9H-KFUS5QwtXDnSO5jdp8tLeBX2SHwxfKn3Fz3C-L3x5xjDHK_mN8vk_5p-Nw9ylTN295Y-tqJFAE&lib=Mt8fbuw-d6XaLm38nYLZIiaOYzSCjYGq6"
+
+lead url to update proceed on google sheet	:-https://script.google.com/macros/s/AKfycbw-bpUWY8u0NbtvY0AS8clJBzwwWTyGgFpjrrkKTJIuvJViWCI5-wVlGkGkjKOcrlPd4g/exec

@@ -1,0 +1,43 @@
+  const ss=SpreadsheetApp.openByUrl("https://docs.google.com/spreadsheets/d/1qt_2xO77OwlJrd23yNRn534ZJL_QFRdbgKTJQhzGUIc/edit?addon_store#gid=0")
+  const sheet= ss.getSheetByName("Sheet1")
+
+  function doGet(e)
+  {
+    let obj={}
+    let data = sheet.getDataRange().getValues();
+    obj.content=data;
+    return ContentService.createTextOutput(JSON.stringify(obj))
+    .setMimeType(ContentService.MimeType.JSON)
+    
+  }
+
+
+https://script.google.com/macros/s/AKfycbwLyCCpyAeNwwiJl9kD4XniSeF0oSqLzTZBq542dGH2oSkbHaF0hwJZQt209srRGTz7Kg/exec
+
+
+function onEdit(e)
+{
+
+
+  
+  let range="";
+  range = e.range;
+  const col = range.getColumn();
+  if(col == 1)
+  {
+    const row=range.getRow();
+    const dataCell= range.offset(0,1);
+    dataCell.setValue(new Date);
+
+  }
+}
+
+
+function logN(val)
+{
+  const ss=SpreadsheetApp.getActiveSpreadsheet().getSheetByName('Sheet3');
+  ss.appendRow([val]);
+
+}
+
+

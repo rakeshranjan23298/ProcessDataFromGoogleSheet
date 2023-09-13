@@ -1,0 +1,81 @@
+------------------------------------------------------------------------------------------------------step 1-----------------------------------------------------
+
+  const ss=SpreadsheetApp.openByUrl("https://docs.google.com/spreadsheets/d/1qt_2xO77OwlJrd23yNRn534ZJL_QFRdbgKTJQhzGUIc/edit?addon_store#gid=0")			-- google sheet URL
+  const sheet= ss.getSheetByName("Sheet1")
+  
+
+  
+  function doGet(e)
+  {
+    let obj={}
+    let data = sheet.getDataRange().getValues();
+    obj.content=data;
+    return ContentService.createTextOutput(JSON.stringify(obj))
+    .setMimeType(ContentService.MimeType.JSON)
+    
+  }
+
+
+
+
+
+
+
+
+------------------------------------------------------------------------------------------------------step 2-----------------------------------------------------
+
+var sheetName = 'Sheet1'											------> Sheet Name
+var scriptProp = PropertiesService.getScriptProperties()
+
+function intialSetup() {
+  var activeSpreadsheet = SpreadsheetApp.getActiveSpreadsheet()
+  scriptProp.setProperty('key', activeSpreadsheet.getId())
+}
+
+function doGet(e) {
+  var lock = LockService.getScriptLock()
+  lock.tryLock(10000)
+
+  try {
+
+   const ss=SpreadsheetApp.openByUrl("https://docs.google.com/spreadsheets/d/1L3F8Ht-xT8dRvgJuFQZM-jzOez4w5IsDnIajEKMzIpI/edit#gid=0")
+																									|
+																									|
+																									|-----> url of google sheet getting from above code
+	const sheet= ss.getSheetByName("Sheet1")														-----> google sheet Name
+
+    var headers = sheet.getRange(1, 1, 1, sheet.getLastColumn()).getValues()[0]
+    var nextRow = sheet.getLastRow() + 1
+
+
+    var newRow = headers.map(function (header) {
+      return header === 'timestamp' ? new Date() : e.parameter[header]
+    })
+
+    var data = "PROCESSED";
+    var l_row = sheet.getLastRow();
+
+
+    for (var i = 2; i <= l_row; i++) 
+    {
+      var cell = sheet.getRange(i, 3);  //c2
+      cell.setValue(data);
+
+    }
+
+
+    return ContentService
+      .createTextOutput(JSON.stringify({ 'result': 'success', 'row': nextRow }))
+      .setMimeType(ContentService.MimeType.JSON)
+  }
+
+  catch (e) {
+    return ContentService
+      .createTextOutput(JSON.stringify({ 'result': 'error', 'error': e }))
+      .setMimeType(ContentService.MimeType.JSON)
+  }
+
+  finally {
+    lock.releaseLock()
+  }
+}
